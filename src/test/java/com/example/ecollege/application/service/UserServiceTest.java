@@ -83,7 +83,6 @@ class UserServiceTest {
     @Test
     void canCreateUser() {
         //given
-
         Set<String> strRoles = new HashSet<>();
         strRoles.add("admin");
         strRoles.add("user");
@@ -109,10 +108,12 @@ class UserServiceTest {
 
         //when
         UserResponse result = userService.createUser(userRegisterRequest);
+
         assertUserResponseResult(result, userResponse);
 
         verify(userRepository).existsByUsername(userRegisterRequest.getUsername());
         verify(userRepository).existsByEmail(userRegisterRequest.getEmail());
+
         verify(roleRepository).findByName(ERole.ROLE_ADMIN);
         verify(roleRepository).findByName(ERole.ROLE_USER);
         verify(encoder).encode(userRegisterRequest.getPassword());
@@ -120,7 +121,7 @@ class UserServiceTest {
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(userArgumentCaptor.capture());
         User captureUser = userArgumentCaptor.getValue();
-        assertThat(captureUser.getUsername()).isEqualTo(userRegisterRequest.getUsername());
+        assertThat(captureUser.getUsername()).isEqualTo("username");
         assertThat(captureUser.getPassword()).isEqualTo(userRegisterRequest.getPassword());
         assertThat(captureUser.getEmail()).isEqualTo(userRegisterRequest.getEmail());
         assertThat(captureUser.getRealName()).isEqualTo(userRegisterRequest.getRealName());
