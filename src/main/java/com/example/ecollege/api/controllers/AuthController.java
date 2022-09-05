@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import java.util.Locale;
 
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -27,6 +26,7 @@ public class AuthController {
     public AuthController(UserService userService, JwtService jwtService) {
         this.userService = userService;
         this.jwtService = jwtService;
+
     }
 
     @PostMapping("/login")

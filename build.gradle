@@ -5,6 +5,7 @@ plugins {
 	id "org.sonarqube" version "3.4.0.2513"
 	id 'jacoco'
 	//./gradlew sonarqube   -Dsonar.projectKey=ecollege  -Dsonar.host.url=http://localhost:9000   -Dsonar.login=sqp_38886f5ff80eb68b0e7c4e3453c842802f4011cf
+
 }
 
 group = 'com.example'
@@ -14,16 +15,8 @@ sourceCompatibility = '11'
 repositories {
 	mavenCentral()
 }
-test {
-	finalizedBy jacocoTestReport // report is always generated after tests run
-}
-jacocoTestReport {
-	dependsOn test // tests are required to run before generating the report
-}
-jacoco {
-	toolVersion = "0.8.8"
-	reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
-}
+
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-parent:2.7.2'
@@ -37,7 +30,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-
+	implementation 'org.sonarsource.sonarqube:sonar-duplications:7.0'
 
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2',
 			// Uncomment the next line if you want to use RSASSA-PSS (PS256, PS384, PS512) algorithms:
@@ -53,6 +46,18 @@ dependencies {
 
 }
 
+
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+	}
+}
 tasks.named('test') {
+
+
 	useJUnitPlatform()
+
+
+
 }
