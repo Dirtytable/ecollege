@@ -122,10 +122,10 @@ class UserServiceTest {
         verify(userRepository).save(userArgumentCaptor.capture());
         User captureUser = userArgumentCaptor.getValue();
         assertThat(captureUser.getUsername()).isEqualTo("username");
-        assertThat(captureUser.getPassword()).isEqualTo(userRegisterRequest.getPassword());
-        assertThat(captureUser.getEmail()).isEqualTo(userRegisterRequest.getEmail());
-        assertThat(captureUser.getRealName()).isEqualTo(userRegisterRequest.getRealName());
-        assertThat(captureUser.getGroup()).isEqualTo(userRegisterRequest.getGroup());
+        assertThat(captureUser.getPassword()).isEqualTo("password");
+        assertThat(captureUser.getEmail()).isEqualTo("email@mail.com");
+        assertThat(captureUser.getRealName()).isEqualTo("name");
+        assertThat(captureUser.getGroup()).isEqualTo("group");
         for (int i = 0; i < 2; i++) {
             assertThat(captureUser.getRoles()).contains(roles.get(i));
         }

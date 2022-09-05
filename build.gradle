@@ -4,7 +4,6 @@ plugins {
 	id 'java'
 	id "org.sonarqube" version "3.4.0.2513"
 	id 'jacoco'
-	//./gradlew sonarqube   -Dsonar.projectKey=ecollege  -Dsonar.host.url=http://localhost:9000   -Dsonar.login=sqp_38886f5ff80eb68b0e7c4e3453c842802f4011cf
 
 }
 
