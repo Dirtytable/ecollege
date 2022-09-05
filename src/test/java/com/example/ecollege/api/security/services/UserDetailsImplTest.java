@@ -29,7 +29,9 @@ class UserDetailsImplTest {
         roles.add(new Role(ERole.ROLE_ADMIN));
         user.setRoles(roles);
 
-        UserDetailsImpl result = UserDetailsImpl.build(user);
+        UserDetailsImpl result = UserDetailsImpl.build(new User("username", "password",
+                "email@gamil.com",
+                "realName", "group"));
         assertThat(result.getId()).isEqualTo(user.getId());
         assertThat(result.getUsername()).isEqualTo(user.getUsername());
         assertThat(result.getEmail()).isEqualTo(user.getEmail());

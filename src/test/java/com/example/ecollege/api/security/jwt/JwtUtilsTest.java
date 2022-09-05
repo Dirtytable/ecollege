@@ -78,19 +78,23 @@ class JwtUtilsTest {
 
         String result = jwtUtils.getUserNameFromJwtToken(token);
 
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
         assertThat(result).isEqualTo(
-                Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject()
+                Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject()
         );
     }
 
     @Test
     void validateJwtToken() {
         String username = "username";
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
         String token = Jwts.builder()
                 .setSubject((username))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS256, jwtSecret)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         boolean result = jwtUtils.validateJwtToken(token);
@@ -109,13 +113,14 @@ class JwtUtilsTest {
     @Test
     void willThrowExpiredJwtException() {
         String username = "username";
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        Key key = Keys.hmacShaKeyFor(keyBytes);
         String token = Jwts.builder()
                 .setSubject((username))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date())
-                .signWith(SignatureAlgorithm.HS256, jwtSecret)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
         boolean result = jwtUtils.validateJwtToken(token);
 
         assertThat(result).isFalse();

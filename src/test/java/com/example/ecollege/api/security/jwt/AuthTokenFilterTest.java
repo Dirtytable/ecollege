@@ -6,6 +6,8 @@ import com.example.ecollege.api.security.services.UserDetailsImpl;
 import com.example.ecollege.api.security.services.UserDetailsServiceImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -59,15 +62,16 @@ class AuthTokenFilterTest {
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
+        byte[] keyBytes = Decoders.BASE64.decode("sdsadnasjknkjakjbddjasndlsnkndsalkdlas312t38sadsa");
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
         String jwt = Jwts.builder()
                 .setSubject((username))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + 1000000))
-                .signWith(SignatureAlgorithm.HS256,
-                        "sdsadnasjknkjakjbddjasndlsnkndsalkdlas312t38sadsa"
-                )
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-        String headerAuth = "Bearer "+jwt;
+        String headerAuth = "Bearer " + jwt;
         request.addHeader("Authorization", headerAuth);
 
         given(jwtUtils.validateJwtToken(jwt)).willReturn(true);
@@ -101,13 +105,14 @@ class AuthTokenFilterTest {
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
+        byte[] keyBytes = Decoders.BASE64.decode("sdsadnasjknkjakjbddjasndlsnkndsalkdlas312t38sadsa");
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
         String jwt = Jwts.builder()
                 .setSubject((username))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + 1000000))
-                .signWith(SignatureAlgorithm.HS256,
-                        "sdsadnasjknkjakjbddjasndlsnkndsalkdlas312t38sadsa"
-                )
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
         String headerAuth = "Bearer "+jwt;
         request.addHeader("Authorization", headerAuth);
